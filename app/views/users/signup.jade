@@ -1,0 +1,26 @@
+extends ../shared/template
+
+block content
+  h1= title
+
+  if(message)
+    .alert(style='color: red')
+      p= message
+
+  form(action='/signup', method='post')
+    label Email
+    input(type='text', name='email')
+    br
+    label Password
+    input(type='password', name='password')
+    br
+    button(type='submit') Signup
+
+  hr
+  p
+      | Already have an account?
+      a(href='/login') Login
+    p
+      | Or go
+      a(href='/') home
+      | .
