@@ -68,13 +68,28 @@ function load(app, fn){
 			failureRedirect : '/'
 		}));
 
+  // =====================================
+	// GOOGLE ROUTES =======================
+	// =====================================
+	// send to google to do the authentication
+	// profile gets us their basic information including their name
+	// email gets their emails
+    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
+
+    // the callback after google has authenticated the user
+    app.get('/auth/google/callback',
+            passport.authenticate('google', {
+                    successRedirect : '/profile',
+                    failureRedirect : '/'
+            }));
+
   // =============================================================================
 // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
 // =============================================================================
 
 	// locally --------------------------------
 		app.get('/connect/local', function(req, res) {
-			res.render('connect-local.ejs', { message: req.flash('loginMessage') });
+			res.render('users/connect-local', { message: req.flash('loginMessage') });
 		});
 		app.post('/connect/local', passport.authenticate('local-signup', {
 			successRedirect : '/profile', // redirect to the secure profile section

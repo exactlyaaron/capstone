@@ -6,6 +6,7 @@ var LocalStrategy = require('passport-local').Strategy;
 var FacebookStrategy = require('passport-facebook').Strategy;
 var TwitterStrategy  = require('passport-twitter').Strategy;
 
+
 // load up the user model\
 var traceur = require('traceur');
 var User = traceur.require(__dirname + '/../models/user.js');
@@ -26,9 +27,6 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
 
-
-
-
     passport.serializeUser(function(user, done) {
         done(null, user._id);
     });
@@ -39,9 +37,6 @@ module.exports = function(passport) {
             done(err, user);
         });
     });
-
-
-
 
 
   	// =========================================================================
@@ -62,41 +57,75 @@ module.exports = function(passport) {
         req.flash('signupMessage', '');
         // asynchronous
         // User.findOne wont fire unless data is sent back
-        process.nextTick(function() {
 
-		// find a user whose email is the same as the forms email
-		// we are checking to see if the user trying to login already exists
-        userCollection.findOne({ 'local.email' :  email }, function(err, user) {
-            // if there are any errors, return the error
-            if (err){
-              return done(err);
-            }
+        if(!req.user){
+          process.nextTick(function() {
 
-            // check to see if theres already a user with that email
-            if (user) {
-                return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
-            } else {
+            // find a user whose email is the same as the forms email
+            // we are checking to see if the user trying to login already exists
+            userCollection.findOne({ 'local.email' :  email }, function(err, user) {
+                // if there are any errors, return the error
+                if (err){
+                  return done(err);
+                }
 
-				// if there is no user with that email
-                // create the user
-                var newUser            = new User();
+                // check to see if theres already a user with that email
+                if (user) {
+                    return done(null, false, req.flash('signupMessage', 'That email is already taken.'));
+                } else {
 
-                // set the user's local credentials
-                newUser.local.email    = email;
-                newUser.local.password = newUser.generateHash(password);
+            // if there is no user with that email
+                    // create the user
+                    var newUser            = new User();
 
-				// save the user
-                newUser.save(function(err) {
-                    if (err){
-                      throw err;
-                    }
-                    return done(null, newUser);
+                    // set the user's local credentials
+                    newUser.local.email    = email;
+                    newUser.local.password = newUser.generateHash(password);
+
+            // save the user
+                    newUser.save(function(err) {
+                        if (err){
+                          throw err;
+                        }
+                        return done(null, newUser);
+                    });
+                }
+
+            });
+
+          });
+        } else {
+          process.nextTick(function(){
+            User.findByEmail(email, function(err, user) {
+              console.log('*************');
+              console.log(user);
+              console.log('*************');
+
+              user = _.create(User.prototype, user);
+
+              if(err){
+                return done(err);
+              }
+
+              if(user){
+                return done(null, false, req.flash('registerMessage', 'That email is already taken.'));
+              } else {
+                var existingUser = req.user; // pull the user out of the session
+
+                existingUser.local.email = email;
+                existingUser.local.password = existingUser.generateHash(password);
+
+                existingUser.save(function(err){
+                  if(err){
+                    throw err;
+                  }
+                  return done(null, existingUser);
                 });
-            }
+              }
+            });
+          });
+        }
 
-        });
-
-        });
 
     }));
 
@@ -204,6 +233,8 @@ module.exports = function(passport) {
 	        } else {
 				// user already exists and is logged in, we have to link accounts
 	            var user            = req.user; // pull the user out of the session
+              user = _.create(User.prototype, user);
+
 
 				// update the current users facebook credentials
 	            user.facebook.id    = profile.id;
@@ -232,51 +263,76 @@ module.exports = function(passport) {
 
         consumerKey     : configAuth.twitterAuth.consumerKey,
         consumerSecret  : configAuth.twitterAuth.consumerSecret,
-        callbackURL     : configAuth.twitterAuth.callbackURL
+        callbackURL     : configAuth.twitterAuth.callbackURL,
+        passReqToCallback : true
 
     },
-    function(token, tokenSecret, profile, done) {
+
+    function(req, token, refreshToken, profile, done) {
 
         // make the code asynchronous
       	// User.findOne won't fire until we have all our data back from Twitter
           	process.nextTick(function() {
 
-      	        userCollection.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+              if (!req.user) {
 
-      	       	 	// if there is an error, stop everything and return that
-      		        // ie an error connecting to the database
-      	            if (err){
+                userCollection.findOne({ 'twitter.id' : profile.id }, function(err, user) {
+
+                     // if there is an error, stop everything and return that
+                  // ie an error connecting to the database
+                    if (err){
                       return done(err);
                     }
 
-      				// if the user is found then log them in
-      	            if (user) {
-      	                return done(null, user); // user found, return that user
-      	            } else {
-      	                // if there is no user, create them
-      	                var newUser                 = new User();
+              // if the user is found then log them in
+                    if (user) {
+                        return done(null, user); // user found, return that user
+                    } else {
+                        // if there is no user, create them
+                        var newUser                 = new User();
 
-      					// set all of the user data that we need
-      	                newUser.twitter.id          = profile.id;
-      	                newUser.twitter.token       = token;
-      	                newUser.twitter.username    = profile.username;
-      	                newUser.twitter.displayName = profile.displayName;
+                // set all of the user data that we need
+                        newUser.twitter.id          = profile.id;
+                        newUser.twitter.token       = token;
+                        newUser.twitter.username    = profile.username;
+                        newUser.twitter.displayName = profile.displayName;
 
-      					// save our user into the database
-      	                newUser.save(function(err) {
-      	                    if (err){
+                // save our user into the database
+                        newUser.save(function(err) {
+                            if (err){
                               throw err;
                             }
 
-      	                    return done(null, newUser);
-      	                });
-      	            }
-      	        });
+                            return done(null, newUser);
+                        });
+                    }
+                });
+
+              }else{
+                // user already exists and is logged in, we have to link accounts
+                var user            = req.user; // pull the user out of the session
+                user = _.create(User.prototype, user);
+
+
+                // update the current users facebook credentials
+                user.twitter.id          = profile.id;
+                user.twitter.token       = token;
+                user.twitter.username    = profile.username;
+                user.twitter.displayName = profile.displayName;
+
+                // save the user
+                user.save(function(err) {
+                    if (err){
+                      throw err;
+                    }
+
+                    return done(null, user);
+                });
+              }
 
       	});
 
     }));
-
 
 
 };
