@@ -96,12 +96,15 @@ module.exports = function(passport) {
           });
         } else {
           process.nextTick(function(){
+
+            // console.log('--------------');
+            // console.log
+            // console.log('--------------');
+
             User.findByEmail(email, function(err, user) {
               console.log('*************');
               console.log(user);
               console.log('*************');
-
-              user = _.create(User.prototype, user);
 
               if(err){
                 return done(err);
@@ -110,7 +113,11 @@ module.exports = function(passport) {
               if(user){
                 return done(null, false, req.flash('registerMessage', 'That email is already taken.'));
               } else {
+                console.log('MADE IT TO HERE');
+
                 var existingUser = req.user; // pull the user out of the session
+
+                existingUser = _.create(User.prototype, existingUser);
 
                 existingUser.local.email = email;
                 existingUser.local.password = existingUser.generateHash(password);

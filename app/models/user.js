@@ -55,6 +55,12 @@ class User {
     });
   }
 
+  static findByEmail(email, fn){
+    userCollection.findOne({'local.email': email}, (err, user)=>{
+      fn(err, user);
+    });
+  }
+
 
 }
 

@@ -89,7 +89,7 @@ function load(app, fn){
 
 	// locally --------------------------------
 		app.get('/connect/local', function(req, res) {
-			res.render('users/connect-local', { message: req.flash('loginMessage') });
+			res.render('users/connect-local', { message: req.flash('registerMessage') });
 		});
 		app.post('/connect/local', passport.authenticate('local-signup', {
 			successRedirect : '/profile', // redirect to the secure profile section
