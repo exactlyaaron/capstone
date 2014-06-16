@@ -10,28 +10,26 @@ var bcrypt = require('bcrypt-nodejs');
 
 class User {
   constructor(){
+
     this.local = {
       email:    String,
       password: String
     };
+
     this.facebook = {
       id:       String,
       token:    String,
       email:    String,
       name:     String
     };
+
     this.twitter = {
       id:       String,
       token:    String,
       displayName: String,
       username:   String
     };
-    this.google = {
-      id: String,
-      token: String,
-      email: String,
-      name: String
-    };
+
   }
 
   save(fn){

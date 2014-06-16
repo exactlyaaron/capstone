@@ -3,4 +3,8 @@ extends ../shared/template
 block content
   h1= title
 
-  h2= user.email
+  if(user)
+    h2= user.twitter.id
+    p= user.twitter.token
+    p= user.twitter.username
+    p= user.twitter.displayName

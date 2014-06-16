@@ -42,8 +42,69 @@ function load(app, fn){
 		failureFlash : true // allow flash messages
 	}));
 
-  // process the login form
-	// app.post('/login', do all our passport stuff here);
+  // =====================================
+	// FACEBOOK ROUTES =====================
+	// =====================================
+	// route for facebook authentication and login
+	app.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
+
+	// handle the callback after facebook has authenticated the user
+	app.get('/auth/facebook/callback',
+		passport.authenticate('facebook', {
+			successRedirect : '/profile',
+			failureRedirect : '/'
+		}));
+
+  // =====================================
+	// TWITTER ROUTES ======================
+	// =====================================
+	// route for twitter authentication and login
+	app.get('/auth/twitter', passport.authenticate('twitter'));
+
+	// handle the callback after twitter has authenticated the user
+	app.get('/auth/twitter/callback',
+		passport.authenticate('twitter', {
+			successRedirect : '/profile',
+			failureRedirect : '/'
+		}));
+
+  // =============================================================================
+// AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
+// =============================================================================
+
+	// locally --------------------------------
+		app.get('/connect/local', function(req, res) {
+			res.render('connect-local.ejs', { message: req.flash('loginMessage') });
+		});
+		app.post('/connect/local', passport.authenticate('local-signup', {
+			successRedirect : '/profile', // redirect to the secure profile section
+			failureRedirect : '/connect/local', // redirect back to the signup page if there is an error
+			failureFlash : true // allow flash messages
+		}));
+
+	// facebook -------------------------------
+
+		// send to facebook to do the authentication
+		app.get('/connect/facebook', passport.authorize('facebook', { scope : 'email' }));
+
+		// handle the callback after facebook has authorized the user
+		app.get('/connect/facebook/callback',
+			passport.authorize('facebook', {
+				successRedirect : '/profile',
+				failureRedirect : '/'
+			}));
+
+	// twitter --------------------------------
+
+		// send to twitter to do the authentication
+		app.get('/connect/twitter', passport.authorize('twitter', { scope : 'email' }));
+
+		// handle the callback after twitter has authorized the user
+		app.get('/connect/twitter/callback',
+			passport.authorize('twitter', {
+				successRedirect : '/profile',
+				failureRedirect : '/'
+			}));
 
 
 
