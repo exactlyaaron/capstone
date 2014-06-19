@@ -3,11 +3,50 @@ html
   head
     meta(charset='utf-8')
     title= title
+    link(href='/less/normalize.css', rel='stylesheet')
     link(href='/less/app.css', rel='stylesheet')
+    link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css', rel='stylesheet')
   body
     header
-      a(href='/logout') Logout
-    block content
+      #logo
+        a(href='/dashboard')
+          img(src='/img/assets/logo.svg')
+      #main-search-container
+        form#main-search-form
+          input#main-search(type='text', placeholder='Search for people, artists, and songs')
+          button#main-search-btn
+            i.fa.fa-search
+        a#discover(href='#') Discover
+      #user
+        if(user)
+          a(href='/profile') #{user.appName}
+          #user-pic(style='background-image: url(#{user.primaryPhoto})')
+      .clear
+    .clear
+
+    #main-wrapper
+      #main-nav-container
+        #main-nav
+          ul
+            li
+              a(href='#') Suggestions
+            li
+              a(href='#') Messages
+            li
+              a(href='/users/dash') Dashboard
+            li
+              a(href='/profile') My Profile
+            li
+              a(href='#') My Friends
+            li
+              a(href='#') Chat
+            li
+              a(href='#') Account
+            li
+              a(href='/logout') Logout
+
+      #main-content-wrapper
+        block content
 
     script(src='/js/vendor/jquery-2.1.1.js')
     script(src='/js/vendor/lodash-2.4.1.js')

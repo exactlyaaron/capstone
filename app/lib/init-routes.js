@@ -20,8 +20,12 @@ module.exports = (req, res, next)=>{
 function load(app, fn){
   var home = traceur.require(__dirname + '/../routes/home.js');
   var users = traceur.require(__dirname + '/../routes/users.js');
+  var User = traceur.require(__dirname + '/../models/user.js');
+  var _ = require('lodash');
   var passport = require('passport');
   require('../config/passport')(passport); // pass passport for configuration
+
+  //app.all('*', users.lookup);
 
   app.get('/', dbg, home.index);
 
@@ -29,6 +33,10 @@ function load(app, fn){
   app.get('/signup', dbg, users.signup);
   app.get('/profile', dbg, isLoggedIn, users.profile);
   app.get('/logout', dbg, users.logout);
+
+  app.get('/users/edit',dbg, users.edit);
+  app.post('/users/edit',dbg, users.update);
+  app.get('/users/dash', dbg, users.dash);
 
   app.post('/signup', passport.authenticate('local-signup', {
 		successRedirect : '/profile', // redirect to the secure profile section
@@ -68,24 +76,10 @@ function load(app, fn){
 			failureRedirect : '/'
 		}));
 
-  // =====================================
-	// GOOGLE ROUTES =======================
-	// =====================================
-	// send to google to do the authentication
-	// profile gets us their basic information including their name
-	// email gets their emails
-    app.get('/auth/google', passport.authenticate('google', { scope : ['profile', 'email'] }));
-
-    // the callback after google has authenticated the user
-    app.get('/auth/google/callback',
-            passport.authenticate('google', {
-                    successRedirect : '/profile',
-                    failureRedirect : '/'
-            }));
 
   // =============================================================================
-// AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
-// =============================================================================
+  // AUTHORIZE (ALREADY LOGGED IN / CONNECTING OTHER SOCIAL ACCOUNT) =============
+  // =============================================================================
 
 	// locally --------------------------------
 		app.get('/connect/local', function(req, res) {
@@ -121,7 +115,44 @@ function load(app, fn){
 				failureRedirect : '/'
 			}));
 
+  // =============================================================================
+  // UNLINK ACCOUNTS =============================================================
+  // =============================================================================
+  // used to unlink accounts. for social accounts, just remove the token
+  // for local account, remove email and password
+  // user account will stay active in case they want to reconnect in the future
 
+    // local -----------------------------------
+    app.get('/unlink/local', function(req, res) {
+        var user            = req.user;
+        user.local.email    = undefined;
+        user.local.password = undefined;
+        user.save(function(err) {
+            res.redirect('/profile');
+        });
+    });
+
+    // facebook -------------------------------
+    app.get('/unlink/facebook', function(req, res) {
+        var user            = req.user;
+        user = _.create(User.prototype, user);
+        user.facebook.token = undefined;
+        user.facebook.name = undefined;
+        user.facebook.email = undefined;
+        user.save(function(err) {
+            res.redirect('/profile');
+        });
+    });
+
+    // twitter --------------------------------
+    app.get('/unlink/twitter', function(req, res) {
+        var user           = req.user;
+        user = _.create(User.prototype, user);
+        user.twitter.token = undefined;
+        user.save(function(err) {
+           res.redirect('/profile');
+        });
+    });
 
   console.log('Routes Loaded');
   fn();

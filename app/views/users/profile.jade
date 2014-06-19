@@ -9,8 +9,7 @@ block content
         h1
           span.fa.fa-anchor
           | Profile Page
-        form(method='post', action='/logout')
-          button.btn.btn-default.btn-sm#logout Logout
+        a(href='/logout') Logout
       .row
         // LOCAL INFORMATION
         .col-sm-4
@@ -70,3 +69,22 @@ block content
                 a.btn.btn-info(href='/unlink/twitter') Unlink
             else
               a.btn.btn-info(href='/connect/twitter') Connect Twitter
+
+        form(action='/users/edit', method='POST', enctype='multipart/form-data')
+          label Your Profile Picture:
+          input(type='file', name='photo')
+          .clear
+          label Your Name:
+          input(type='text', name='appName', autofocus=true, value=user.appName)
+          .clear
+          label About you:
+          textarea(type='text', name='bio', value=user.bio)
+          .clear
+          label Favorite Genres:
+          input(type='text', name='favoriteGenres', value=user.favoriteGenres)
+          .clear
+          input#artist-search-input(type='text', name='artist', placeholder='Search for artists')
+          a#find-artists(href='#') Find Artists
+          #artist-results
+
+          button Save Profile

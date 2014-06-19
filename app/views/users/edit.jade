@@ -1,0 +1,20 @@
+extends ../shared/template
+
+block content
+  h1 Edit Profile
+
+  form(action='/users/edit', method='POST', enctype='multipart/form-data')
+    label Your Profile Picture:
+    input(type='file', name='photo')
+    .clear
+    label Your Name:
+    input(type='text', name='appName', autofocus=true, value=user.appName)
+    .clear
+    label About you:
+    textarea(type='text', name='bio', value=user.bio)
+    .clear
+    label Favorite Genres:
+    input(type='text', name='favoriteGenres', value=user.favoriteGenres)
+    .clear
+
+    button Save Profile

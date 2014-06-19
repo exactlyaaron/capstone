@@ -5,8 +5,11 @@
 var userCollection = global.nss.db.collection('users');
 var Mongo = require('mongodb');
 var traceur = require('traceur');
-// var Base = traceur.require(__dirname + '/base.js');
+var Base = traceur.require(__dirname + '/base.js');
 var bcrypt = require('bcrypt-nodejs');
+var fs = require('fs');
+var _ = require('lodash');
+var path = require('path');
 
 class User {
   constructor(){
@@ -21,17 +24,17 @@ class User {
       name:     String
     };
     this.twitter = {
-      id:       String,
-      token:    String,
+      id:          String,
+      token:       String,
       displayName: String,
-      username:   String
+      username:    String
     };
-    this.google = {
-      id: String,
-      token: String,
-      email: String,
-      name: String
-    };
+    this.appName = '';
+    this.bio = '';
+    this.primaryPhoto = '/img/assets/defaultPhoto.png';
+    this.favoriteArtists = [];
+    this.favoriteGenres = [];
+    this.posts = [];
   }
 
   save(fn){
@@ -48,11 +51,42 @@ class User {
       return bcrypt.compareSync(password, this.local.password);
   }
 
+  update(fields, files){
+    if(fields && typeof(fields.appName) !== 'undefined') {
+
+      this.appName = fields.appName[0];
+      this.bio = fields.bio[0];
+
+      this.favoriteGenres = fields.favoriteGenres[0].toLowerCase().replace(/,/g,' ').split(' ').filter(Boolean);
+
+      if(files.photo[0].size !== 0){
+
+        var extension  = path.extname(files.photo[0].path);
+
+        this.primaryPhoto = `/img/${this._id.toString()}/profile${extension}`;
+
+        var userDir = `${__dirname}/../static/img/${this._id.toString()}`;
+        userDir = path.normalize(userDir);
+
+        this.primaryPhotoPath = `${userDir}/profile${extension}`;
+        this.primaryPhotoDir = userDir;
+        if(!fs.existsSync(userDir)){
+          fs.mkdirSync(userDir);
+        }
+        fs.renameSync(files.photo[0].path, this.primaryPhotoPath);
+      }
+    }
+  }
+
+  // static findById(id, fn){
+  //   id = Mongo.ObjectID(id);
+  //   userCollection.findOne({_id: id}, (err, user)=>{
+  //     fn(null, user);
+  //   });
+  // }
+
   static findById(id, fn){
-    id = Mongo.ObjectID(id);
-    userCollection.findOne({_id: id}, (err, user)=>{
-      fn(null, user);
-    });
+    Base.findById(id, userCollection, User, fn);
   }
 
   static findByEmail(email, fn){

@@ -31,7 +31,9 @@ function addUserToSocket(socket){
   //   });
   // });
 
+  console.log('COOKIE ==========================================');
   console.log(decoded);
+  console.log('=================================================');
 }
 
 function decode(string) {

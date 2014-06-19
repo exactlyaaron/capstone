@@ -1,7 +1,10 @@
-extends ../shared/template
+extends ../shared/pre-login
 
 block content
   h1= title
+
+  a(href='/logout') Logout
+  br
 
   a(href='/login') Local Login
   br
