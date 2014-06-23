@@ -1,0 +1,25 @@
+extends ../shared/template
+
+block content
+  h1 Search Page
+
+  p Search results for: '<span id='query'>#{query}</span>'
+
+  hr
+  #results
+    h2 USERS:
+    #users
+      each user in users
+        .user-pic(style='background-image: url(#{user.primaryPhoto})')
+        p
+          a(href='/users/profile/#{user._id}') #{user.appName}
+    h2 ARTISTS:
+    #artists
+
+    h2 SONGS:
+    #songs
+      #player
+
+block scripts
+  script(src='/js/es6/compiled/search.js')
+  script(src='/js/es6/compiled/songstream.js')

@@ -1,0 +1,20 @@
+extends ../shared/template
+
+block content
+  h1 USER PROFILE PAGE
+  #other-user(data-id='#{otherUser._id}')
+    h2= otherUser.appName
+    .other-profile-pic(style='background-image:url(#{otherUser.primaryPhoto})')
+    p= otherUser.bio
+    .clear
+    a#send-msg(href='/messages/new/#{otherUser._id}') Message
+    .clear
+
+    if(friend === true)
+      a(href='#')#remove-friend UNFRIEND
+    if(friend === false)
+      a(href='#')#add-friend ADD FRIEND
+
+
+block scripts
+  script(src='/js/es6/compiled/friends.js')

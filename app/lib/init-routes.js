@@ -4,10 +4,6 @@ var traceur = require('traceur');
 var dbg = traceur.require(__dirname + '/route-debugger.js');
 var initialized = false;
 
-// var passport = require('passport');
-// require('./models/passport')(passport); // pass passport for configuration
-
-
 module.exports = (req, res, next)=>{
   if(!initialized){
     initialized = true;
@@ -20,6 +16,10 @@ module.exports = (req, res, next)=>{
 function load(app, fn){
   var home = traceur.require(__dirname + '/../routes/home.js');
   var users = traceur.require(__dirname + '/../routes/users.js');
+  var artists = traceur.require(__dirname + '/../routes/artists.js');
+  var suggestions = traceur.require(__dirname + '/../routes/suggestions.js');
+  var messages = traceur.require(__dirname + '/../routes/messages.js');
+  var posts = traceur.require(__dirname + '/../routes/posts.js');
   var User = traceur.require(__dirname + '/../models/user.js');
   var _ = require('lodash');
   var passport = require('passport');
@@ -37,6 +37,39 @@ function load(app, fn){
   app.get('/users/edit',dbg, users.edit);
   app.post('/users/edit',dbg, users.update);
   app.get('/users/dash', dbg, users.dash);
+  app.get('/users/friends', dbg, users.showFriends);
+
+  app.get('/users/all', dbg, users.showAll);
+  app.get('/users/profile/:userId', dbg, users.showProfile);
+
+  app.post('/search', dbg, users.search);
+  app.get('/search/users', dbg, users.searchUsers);
+
+  app.put('/users/:userId/addArtist/:artistId', dbg, artists.addArtist);
+  app.put('/users/:userId/removeArtist/:artistId', dbg, artists.removeArtist);
+
+  app.put('/users/:userId/addFriend/:otherId', dbg, users.addFriend);
+  app.put('/users/:userId/removeFriend/:otherId', dbg, users.removeFriend);
+
+  app.post('/users/:userId/suggest', dbg, suggestions.showSuggestionBox);
+  app.post('/users/:userId/suggest/:mbid', dbg, suggestions.sendSuggestion);
+
+  app.get('/suggestions/all', dbg, suggestions.index);
+  app.get('/suggestions/:toId/count', dbg, suggestions.count);
+
+  app.delete('/suggestions/:id/destroy', dbg, suggestions.destroy);
+
+  app.get('/posts/index', dbg, posts.index);
+  app.post('/posts/new', dbg, posts.create);
+  app.post('/posts/:postId/share', dbg, posts.share);
+
+  app.get('/artists/:artistId', dbg, artists.show);
+
+  app.get('/messages/inbox', dbg, messages.index);
+  app.post('/messages/:msgId', dbg, messages.destroy);
+  app.get('/messages/new/:toId', dbg, messages.new);
+  app.post('/messages/new/:toId', dbg, messages.create);
+  app.get('/messages/:toId/count', dbg, messages.count);
 
   app.post('/signup', passport.authenticate('local-signup', {
 		successRedirect : '/profile', // redirect to the secure profile section

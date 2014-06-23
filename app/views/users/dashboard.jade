@@ -1,5 +1,18 @@
 extends ../shared/template
 
 block content
-  h1 DASHBOARD HEER
-  #tall
+
+  br
+  br
+  br
+  #new-post
+    input#new-post-body(type='text', placeholder='Share some stuff with the world')
+    #new-post-submit-wrapper
+      input#new-post-tags(type='text', placeholder='Tag some stuff')
+      a#new-post-submit(href='#') POST
+
+  #posts
+
+
+block scripts
+  script(src='/js/es6/compiled/dashboard.js')

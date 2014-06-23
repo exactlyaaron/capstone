@@ -1,0 +1,7 @@
+.post-wrapper
+  p= post.body
+  p Posted by: #{post.authorName}
+  each tag in post.tags
+    a(href='#')= tag
+
+  hr

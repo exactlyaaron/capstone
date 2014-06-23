@@ -1,0 +1,14 @@
+each suggestion in suggestions
+  .suggestion-single(data-id='#{suggestion._id}')
+    .suggestion-pic(style='background-image:url(#{suggestion.photo})')
+    - if(suggestion.musicType === 'song')
+        h3 #{suggestion.name}
+    - if(suggestion.musicType === 'artist')
+        a(href='/artists/#{suggestion.mbid}')
+          h3 #{suggestion.name}
+
+    p From:
+      a(href='/users/profile/#{suggestion.fromId}') #{suggestion.fromUserName}
+
+    .clear
+    a#delete-suggestion(href'#') Delete Suggestion

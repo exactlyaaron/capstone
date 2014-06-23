@@ -82,9 +82,19 @@ block content
           .clear
           label Favorite Genres:
           input(type='text', name='favoriteGenres', value=user.favoriteGenres)
+          each genre in user.favoriteGenres
+            p= genre
           .clear
-          input#artist-search-input(type='text', name='artist', placeholder='Search for artists')
-          a#find-artists(href='#') Find Artists
-          #artist-results
+
+          h3 Favorite Artists
+          #favorite-artists
+            include favorite-artists-profile
+          a(href='#') Find New Artists
+
+          br
+          br
 
           button Save Profile
+
+block scripts
+  script(src='/js/es6/compiled/profile.js')

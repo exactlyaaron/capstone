@@ -9,6 +9,10 @@
   box-sizing:border-box;
 }
 
+a {
+  color: @main-color;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -153,6 +157,15 @@ header {
         background: #2b2b2b;
       }
     }
+
+    p.suggestion-count, p.message-count {
+      display:inline-block;
+      background: @main-color;
+      color:#fff;
+      padding: 3px 8px;
+      margin: 0 0 0 10px;
+
+    }
   }
 }
 
@@ -160,6 +173,121 @@ header {
   float:left;
   padding-left:315px;
   padding-top: 60px;
+  padding-right: 100px;
+}
+
+.artist-result {
+  display:inline-block;
+  padding: 10px;
+  border:1px solid #ccc;
+
+  a.add-favorite-artist {
+    display:inline-block;
+    padding: 5px;
+    background: @main-color;
+    text-decoration:none;
+    color:#fff;
+  }
+}
+
+.favorited-artist {
+  background: @secondary-color;
+}
+
+#player {
+
+  iframe, div {
+    display:inline-block;
+    padding: 10px;
+    border: 1px solid #ccc;
+  }
+}
+
+// .song-result {
+//   display:inline-block;
+//   padding: 10px;
+//   border:1px solid #ccc;
+// }
+
+
+.artist-pic {
+  width: 150px;
+  height: 150px;
+  background-size:cover;
+  background-position:center;
+}
+
+.album-pic {
+  width: 100px;
+  height: 100px;
+  background-size:cover;
+  background-position:center;
+}
+
+p.song-name {
+  font-weight: 600;
+}
+
+p.song-artist {
+  font-weight: 400;
+  font-size: 12px;
+}
+
+.discover-profile-pic, .friend-pic, .user-pic, .suggestion-pic {
+  width: 100px;
+  height: 100px;
+  background-size:cover;
+  background-position:center;
+}
+
+.other-profile-pic {
+  width: 200px;
+  height: 200px;
+  background-size:cover;
+  background-position:center;
+}
+
+.friend-pic {
+  width: 50px;
+  height: 50px;
+  background-size:cover;
+  background-position:center;
+}
+
+#suggest-modal {
+  position: fixed;
+	top: 50%;
+	left: 50%;
+	width: 90%;
+	max-width: 700px;
+	min-width: 320px;
+	height: auto;
+	z-index: 2000;
+  -webkit-backface-visibility: hidden;
+	-moz-backface-visibility: hidden;
+	backface-visibility: hidden;
+	-webkit-transform: translateX(-50%) translateY(-50%);
+	-moz-transform: translateX(-50%) translateY(-50%);
+	-ms-transform: translateX(-50%) translateY(-50%);
+	transform: translateX(-50%) translateY(-50%);
+  background-color: @main-color;
+
+  a {
+    color:#333;
+  }
+
+  input[type='checkbox'], .album-pic, .artist-pic, .friend-pic{
+    float:left;
+  }
+}
+
+#overlay {
+  background: rgba(0,0,0,0.7);
+  width: 100%;
+  height: 100%;
+  position:fixed;
+  z-index: 1500;
+
 }
 
 #tall {

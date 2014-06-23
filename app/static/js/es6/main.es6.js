@@ -1,24 +1,39 @@
+/* jshint unused: false */
+// global functions
+/* exported ajax, getSuggestionNumber */
+
+function ajax(url, type, data={}, success=r=>console.log(r), dataType='html'){
+  'use strict';
+  $.ajax({url:url, type:type, dataType:dataType, data:data, success:success});
+}
+
+function getSuggestionNumber(){
+  'use strict';
+
+  ajax(`/suggestions/:toId/count`, 'get', null, html=>{
+    $('p.suggestion-count').remove();
+    $('#suggestions-nav').append(html);
+  });
+}
+
+function getMessageNumber(){
+  'use strict';
+
+  ajax(`/messages/:toId/count`, 'get', null, html=>{
+    $('p.message-count').remove();
+    $('#messages-nav').append(html);
+  });
+}
+
 (function(){
   'use strict';
 
   $(document).ready(init);
 
   function init(){
-    $('#find-artists').click(searchArtists);
+    getSuggestionNumber();
+    getMessageNumber();
   }
 
-  function searchArtists(){
-    var query = $('#artist-search-input').val();
-    console.log(query);
-
-    var url = 'http://ws.audioscrobbler.com/2.0/?method=artist.search&artist='+query+'&api_key=fe3c0d18e6dec590f61bf2a0f3615f2c&format=json&limit=15';
-
-    $.getJSON(url, data=>{
-      //console.log(data);
-      var foundArtists = data.results.artistmatches.artist;
-      console.log(foundArtists);
-      //$('#artist-results').append(`<div class="chartdiv" data-place=${place}>`);
-    });
-  }
 
 })();

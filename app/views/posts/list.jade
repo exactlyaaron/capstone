@@ -1,0 +1,12 @@
+if(posts)
+  each post in posts
+    .post-wrapper(data-id='#{post._id}')
+      p= post.body
+      p Posted by: #{post.authorName}
+      p= post.date
+      each tag in post.tags
+        a(href='#')= tag
+      .clear
+      -if(post.author.toString() !== user._id.toString())
+        a.share-post(href='#') Share!
+    hr

@@ -1,0 +1,14 @@
+extends ../shared/template
+
+block content
+  h1 DISCOVER SUM Uzers
+
+  input#search-users-input(type='text', placeholder='Search for Fusion users')
+  button#search-users Search
+
+  hr
+  #results-users
+    include results-users
+
+block scripts
+  script(src='/js/es6/compiled/search-users.js') 

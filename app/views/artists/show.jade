@@ -1,0 +1,10 @@
+extends ../shared/template
+
+block content
+  #artist(data-id='#{artistId}')
+  #genres
+  #player
+
+block scripts
+  script(src='/js/es6/compiled/artist.js')
+  script(src='/js/es6/compiled/songstream.js')
