@@ -1,9 +1,9 @@
 extends ../shared/template
 
 block content
-  h1 New Message
+  h2.msg-to New message to: #{toUser.appName}
   .new-msg
     form(method='POST', action='/messages/new/#{toId}')
-      label Message
-      textarea.new-message(name='message')
+      textarea.new-message(name='message', placeholder='Type message here')
+      .clear
       button Send

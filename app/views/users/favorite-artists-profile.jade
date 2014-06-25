@@ -1,5 +1,6 @@
 each artist in user.favoriteArtists
   .favorite-artist(data-id='#{artist.mbid}')
-    a(href='/artists/#{artist.mbid}')= artist.name
-    .clear
+    .favorite-artist-pic(style='background-image:url(#{artist.photo})')
+    a.favorite-artist-name(href='/artists/#{artist.mbid}') #{artist.name}
     a.remove-artist(href='#') Remove from Artists
+  .clear

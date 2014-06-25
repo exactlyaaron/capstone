@@ -1,14 +1,14 @@
 extends ../shared/template
 
 block content
-  h1 DISCOVER SUM Uzers
+  p.searchusers Search for users by Name, Favorite genres, or Favorite artists.
 
   input#search-users-input(type='text', placeholder='Search for Fusion users')
   button#search-users Search
 
-  hr
+  .clear
   #results-users
     include results-users
 
 block scripts
-  script(src='/js/es6/compiled/search-users.js') 
+  script(src='/js/es6/compiled/search-users.js')

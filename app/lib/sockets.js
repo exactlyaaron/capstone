@@ -26,6 +26,7 @@ function sendMessage(data){
   console.log(this);
 
   data.appName = socket.nss.user.appName;
+  data.id = socket.nss.user._id;
   socket.broadcast.emit('receive-message', data);
   socket.emit('receive-message', data);
 }

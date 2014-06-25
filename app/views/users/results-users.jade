@@ -1,9 +1,9 @@
 if(users)
   each user in users
     .user(data-id='#{user._id}')
-      h2 USER INFO
       a(href='/users/profile/#{user._id}')
-        h3= user.appName
         .discover-profile-pic(style='background-image:url(#{user.primaryPhoto})')
+        h3.discover-name= user.appName
+        .clear
 if(users.length < 1)
   p Sorry there are no results. Please try again.

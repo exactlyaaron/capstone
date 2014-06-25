@@ -3,21 +3,21 @@ extends ../shared/template
 block content
 
   #posts-wrapper
-    br
-    br
-    br
     #new-post
       input#new-post-body(type='text', placeholder='Share some stuff with the world')
       #new-post-submit-wrapper
-        input#new-post-tags(type='text', placeholder='Tag some stuff')
+        //p.inline.tag-label TAGS:
         a#new-post-submit(href='#') POST
-
+        input#new-post-tags(type='text', placeholder='tag, things, here')
+      .clear
+      
     #posts
 
   #chat-wrapper
-    p CHAT
+    p#chat-header Chat with the community.
     input#message(type='text')
-    button#send Troll
+    button#send
+      i.fa.fa-wechat
     #chat
     ul#users
 

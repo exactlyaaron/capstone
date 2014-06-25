@@ -16,7 +16,7 @@ html
           input#main-search(type='text', name='query', placeholder='Search for people, artists, and songs')
           button#main-search-btn
             i.fa.fa-search
-        a#discover(href='/users/all') Discover
+      //- a#discover(href='/users/all') Discover
       if(user)
         #user(data-id='#{user._id}')
           if(user)
@@ -38,6 +38,8 @@ html
               a(href='/messages/inbox') Messages
             li
               a(href='/users/dash') Dashboard
+            li
+              a(href='/users/all') Discover
             li
               a(href='/users/friends') My Friends
             li

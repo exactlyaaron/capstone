@@ -54,8 +54,9 @@
         foundSongs.forEach(song=>{
           var albumCover;
           if(song.image){
-            if(song.image.length > 3){
-              albumCover = song.image[3];
+            if(song.image.length > 2){
+              var obj = song.image[3];
+              albumCover = obj['#text'];
             }
           } else {
             albumCover = '/img/assets/placeholder.jpg';
@@ -64,7 +65,7 @@
           var songArtist = song.artist;
 
           $('#player').append(` <div class='search-result song-result' data-type='song' data-song='${songName}' data-artist='${songArtist}' data-mbid='${song.mbid}'>
-                                  <div class='album-pic photo' style='background-image: url(${albumCover["#text"]})'></div>
+                                  <div class='album-pic photo' style='background-image: url(${albumCover})'></div>
                                   <h3 class='name'>${song.name}</h3>
                                   <p class='song-artist'>Artist: ${songArtist}</p>
                                   <a href='#' class='play-song'><i class='fa fa-play-circle'></i> Play</a>
@@ -84,7 +85,6 @@
     $(this).siblings('.photo').hide();
     var song = $(this).parent().attr('data-song');
     var artist = $(this).parent().attr('data-artist');
-    //alert(artist);
 
     getSong(song, artist);
   }
@@ -100,7 +100,6 @@
     var artistName = $(this).prev().text();
     $(this).closest('.artist-result').addClass('favorited-artist');
     $(this).text('Added to Favorites');
-    //alert(`${userId}, ${artistId}, ${artistName}`);
 
     ajax(`/users/${userId}/addArtist/${artistId}`, 'put', {artistName: artistName, artistPhoto: artistPhoto}, html=>{
       console.log(html);

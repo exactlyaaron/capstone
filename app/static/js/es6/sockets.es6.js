@@ -27,16 +27,25 @@
   }
 
   function receiveMessage(data){
+    var id = $('#user').attr('data-id');
+
     console.log('RECEIVE MESSAGE DAATA');
     console.log(data);
     var message;
+
     if(data.appName){
-      message = `<div class='message-bubble'>
+      message = `<div class='message-bubble bubble'>
                       <p class='from'>${data.appName} says:</p>
                       <p class='text'>${data.message}</p>
                      </div>`;
+      if(data.id.toString() === id.toString()){
+        message = `<div class='message-bubble bubble blue'>
+                        <p class='from'>${data.appName} says:</p>
+                        <p class='text'>${data.message}</p>
+                       </div>`;
+      }
     } else {
-      message = `<div class='message-bubble'>
+      message = `<div class='message-bubble bubble'>
                       <p class='from'>Guest says:</p>
                       <p class='text'>${data.message}</p>
                      </div>`;

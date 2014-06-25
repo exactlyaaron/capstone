@@ -3,15 +3,18 @@
 var _ = require('lodash');
 var traceur = require('traceur');
 var Message = traceur.require(__dirname + '/../models/message.js');
+var User = traceur.require(__dirname + '/../models/user.js');
 
 exports.index = (req, res)=>{
   Message.findAllByToId(req.user._id, messages=>{
-    res.render('messages/index', {messages: messages, title: 'Inbox'});
+    res.render('messages/index', {user: req.user, messages: messages, title: 'Inbox'});
   });
 };
 
 exports.new = (req, res)=>{
-  res.render('messages/new', {toId: req.params.toId, title: 'Create New Message'});
+  User.findById(req.params.toId, (err, toUser)=>{
+    res.render('messages/new', {user: req.user, toUser: toUser, toId: req.params.toId, title: 'Create New Message'});
+  });
 };
 
 exports.create = (req, res)=>{

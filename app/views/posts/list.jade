@@ -1,12 +1,16 @@
 if(posts)
   each post in posts
     .post-wrapper(data-id='#{post._id}')
-      p= post.body
-      p Posted by: #{post.authorName}
-      p= post.date
-      each tag in post.tags
-        a(href='#')= tag
+      .post-details
+        .poster-pic(style='background-image:url(#{post.authorPhoto})')
+        p.inline.poster #{post.authorName}
+        -if(post.author.toString() !== user._id.toString())
+          a.share-post(href='#') Share!
+
+      .post-body
+        p= post.body
+
+      .post-tags
+        each tag in post.tags
+          a(href='#')= tag
       .clear
-      -if(post.author.toString() !== user._id.toString())
-        a.share-post(href='#') Share!
-    hr

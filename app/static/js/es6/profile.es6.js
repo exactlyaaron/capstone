@@ -40,9 +40,11 @@
     $('#favorite-music').show();
   }
 
-  function removeFavoriteArtist(){
+  function removeFavoriteArtist(e){
+    e.preventDefault();
     var userId = $('#user').attr('data-id');
-    var artistId = $(this).closest('.favorite-artist').attr('data-id');
+
+    var artistId = $(this).parent('.favorite-artist').attr('data-id');
 
     ajax(`/users/${userId}/removeArtist/${artistId}`, 'put', null, html=>{
       $('#favorite-artists').empty().append(html);
