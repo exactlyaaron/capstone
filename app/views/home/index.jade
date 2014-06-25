@@ -1,15 +1,105 @@
-extends ../shared/pre-login
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    title= title
+    link(href='/less/app.css', rel='stylesheet')
+    link(href='//maxcdn.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css', rel='stylesheet')
 
-block content
-  h1= title
+  body
+    #overlay(style='display:none')
 
-  a(href='/logout') Logout
-  br
+    .row#index-hero
+      #index-hero-content
+        .row
+          #logo
+            img(src='/img/assets/logo.svg')
+          #login
+            p.inline Already a member?
+            a.inline#login-link(href='#') Log in
 
-  a(href='/login') Local Login
-  br
-  a(href='/signup') Local Sign Up
-  br
-  a(href='/auth/facebook') Facebook
-  br
-  a(href='/auth/twitter') Twitter
+        .mission
+          h2 Mix it up with music.
+          p Fusion is the newest social network for you to share your musical tastes with friends and find new friends who enjoy awesome music like you.
+
+        .signup-wrapper
+          a.signup-facebook(href='/auth/facebook')
+            i.fa.fa-facebook
+            p.inline Quick sign-up with Facebook
+
+          .clear
+
+          a.signup-twitter(href='/auth/twitter')
+            i.fa.fa-twitter
+            p.inline Quick sign-up with Twitter
+
+          .clear
+
+          form(action='/signup', method='post')
+            input(type='text', name='email', placeholder='Email Address')
+            .clear
+            input(type='password', name='password', placeholder='Password')
+            .clear
+            button.signup-btn(type='submit') Sign Up!
+
+    .row.description
+      #description-content
+        h2.description-headline Discover and Share
+        p.description-text Find new artists, connect with like-minded fans, and do lots of awesome stuff in general. Such as messaging friends, playing songs from your favorite artists, and suggesting the music you like to all your friends!
+        .clear
+        i.fa.fa-music
+    .row
+      #top-albums
+
+    .row.join-today-wrapper
+      #join-today-content
+        h2 Join the show today!
+        .signup-bottom-wrapper
+          a.signup-facebook(href='/auth/facebook')
+            i.fa.fa-facebook
+            p.inline Quick sign-up with Facebook
+
+          .clear
+
+          a.signup-twitter(href='/auth/twitter')
+            i.fa.fa-twitter
+            p.inline Quick sign-up with Twitter
+
+          .clear
+
+          form(action='/signup', method='post')
+            input(type='text', name='email', placeholder='Email Address')
+            .clear
+            input(type='password', name='password', placeholder='Password')
+            .clear
+            button.signup-btn(type='submit') Sign Up!
+
+    #login-modal(style='display:none')
+      #login-modal-content
+        h2 Login to your Fusion account.
+        a.signup-facebook(href='/auth/facebook')
+          i.fa.fa-facebook
+          p.inline Quick login with Facebook
+        .clear
+        a.signup-twitter(href='/auth/twitter')
+          i.fa.fa-twitter
+          p.inline Quick login with Twitter
+        .clear
+        form(action='/login', method='post')
+          input.login-input(type='text', name='email', placeholder='Email')
+          .clear
+          input.login-input(type='password', name='password', placeholder='Password')
+          .clear
+          button(type='submit') Login
+        a.boxclose
+
+
+
+    script(src='/js/vendor/jquery-2.1.1.js')
+    script(src='/js/vendor/lodash-2.4.1.js')
+    script(src='/js/vendor/moment-2.6.0.js')
+    script(src='/js/vendor/traceur.js')
+    script(src='/socket.io/socket.io.js')
+    script(src='/js/es6/compiled/sockets.js')
+    script(src='/js/es6/compiled/home.js')
+    //script(src='/js/es6/compiled/main.js')

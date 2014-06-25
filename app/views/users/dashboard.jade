@@ -2,16 +2,24 @@ extends ../shared/template
 
 block content
 
-  br
-  br
-  br
-  #new-post
-    input#new-post-body(type='text', placeholder='Share some stuff with the world')
-    #new-post-submit-wrapper
-      input#new-post-tags(type='text', placeholder='Tag some stuff')
-      a#new-post-submit(href='#') POST
+  #posts-wrapper
+    br
+    br
+    br
+    #new-post
+      input#new-post-body(type='text', placeholder='Share some stuff with the world')
+      #new-post-submit-wrapper
+        input#new-post-tags(type='text', placeholder='Tag some stuff')
+        a#new-post-submit(href='#') POST
 
-  #posts
+    #posts
+
+  #chat-wrapper
+    p CHAT
+    input#message(type='text')
+    button#send Troll
+    #chat
+    ul#users
 
 
 block scripts

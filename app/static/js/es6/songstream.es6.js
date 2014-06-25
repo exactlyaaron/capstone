@@ -3,7 +3,9 @@
 /* jshint unused:false */
 
 var songId;
-function getSong(song, artist){
+var sizePx = 130;
+
+function getSong(song, artist, size){
   'use strict';
   var track;
 
@@ -41,21 +43,25 @@ function getSong(song, artist){
     }
   });
 
-  renderTrack(song, artist);
+  renderTrack(song, artist, size);
   //document.getElementById('controls').style.display = 'block';
 }
 
 
 var playerEl;
 var track;
-function renderTrack(song, songArtist) {
+function renderTrack(song, songArtist, size) {
   'use strict';
   playerEl = $(`div[data-song='${songId}']`);
 
+  if(size){
+    sizePx = size;
+  }
+
   var title = song;
   var artist = songArtist;
-  var width = 200;
-  var height = 200;
+  var width = sizePx;
+  var height = sizePx;
 
   //var disabled0 = document.getElementById('disabledResolvers0').value;
   //var disabled1 = document.getElementById('disabledResolvers1').value;
@@ -91,6 +97,6 @@ function renderTrack(song, songArtist) {
     }
   });
 
-  playerEl.append(track.render());
+  playerEl.prepend(track.render());
   //$('#player').append(`<p style='display:inline-block'></p>`);
 }

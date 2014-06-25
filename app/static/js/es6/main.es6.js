@@ -12,7 +12,8 @@ function getSuggestionNumber(){
 
   ajax(`/suggestions/:toId/count`, 'get', null, html=>{
     $('p.suggestion-count').remove();
-    $('#suggestions-nav').append(html);
+    console.log(html);
+    $('#suggestions-nav a').append(html);
   });
 }
 
@@ -21,7 +22,7 @@ function getMessageNumber(){
 
   ajax(`/messages/:toId/count`, 'get', null, html=>{
     $('p.message-count').remove();
-    $('#messages-nav').append(html);
+    $('#messages-nav a').append(html);
   });
 }
 

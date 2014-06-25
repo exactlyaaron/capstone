@@ -2,6 +2,7 @@
 
 var traceur = require('traceur');
 var User = traceur.require(__dirname + '/../models/user.js');
+var Post = traceur.require(__dirname + '/../models/post.js');
 //var userCollection = global.nss.db.collection('users');
 var multiparty = require('multiparty');
 //
@@ -53,9 +54,9 @@ exports.showProfile = (req, res)=>{
   User.findById(req.params.userId, (err, otherUser)=>{
     var user = req.user;
     user.isFriend(otherUser._id, friend=>{
-      console.log('========');
-      console.log(friend);
-      res.render('users/other-profile', {user: req.user, otherUser: otherUser, friend: friend, title: 'User Profile'});
+      Post.findPostsByUser(otherUser._id, posts=>{
+        res.render('users/other-profile', {user: req.user, otherUser: otherUser, posts:posts, friend: friend, title: 'User Profile'});
+      });
     });
   });
 };
@@ -78,8 +79,10 @@ exports.update = (req, res)=>{
 };
 
 exports.search = (req, res)=>{
-  console.log('MADE IT TO THE ROUTE');
+  console.log('MADE IT TO THE ROUTE - SEARCH');
   User.searchUsers(req.body.query, users=>{
+    console.log('FOUND USERS');
+    console.log(users);
     res.render('users/search', {user: req.user, title: 'Search Results', users:users, query: req.body.query});
   });
 };
@@ -119,4 +122,21 @@ exports.removeFriend = (req, res)=>{
 exports.logout = (req, res)=>{
   req.logout();
 	res.redirect('/');
+};
+
+exports.password = (req, res)=>{
+  res.render('users/password', {message: req.flash('passwordMessage'), title: 'Change Password'});
+};
+
+exports.updatePassword = (req, res)=>{
+  User.findById(req.user._id, (err, user)=>{
+    user.changePassword(req.body, (err)=>{
+      if(err){
+        req.flash('passwordMessage', 'Current password is incorrect. Please try again.');
+        res.redirect('/users/password');
+      }else{
+        user.save(()=>{res.redirect('/profile');});
+      }
+    });
+  });
 };

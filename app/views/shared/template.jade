@@ -20,7 +20,10 @@ html
       if(user)
         #user(data-id='#{user._id}')
           if(user)
-            a(href='/profile') #{user.appName}
+            if(user.appName)
+              a(href='/profile') #{user.appName}
+            else
+              a(href='/profile') Designate name in Account Settings
             #user-pic(style='background-image: url(#{user.primaryPhoto})')
       .clear
     .clear
@@ -37,8 +40,6 @@ html
               a(href='/users/dash') Dashboard
             li
               a(href='/users/friends') My Friends
-            li
-              a(href='#') Chat
             li
               a(href='/profile') Account
             li

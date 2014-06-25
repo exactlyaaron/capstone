@@ -1,32 +1,33 @@
 #overlay
 #suggest-modal
-  button#close-modal X
-  h2 SUggest Music
+  #suggest-modal-content
+    button.boxclose#close-modal
 
-  #suggestion(data-id='#{suggestion.mbid}' data-type='#{suggestion.musicType}')
-    - if(suggestion.musicType === 'song')
-      #song(data-id='#{suggestion.mbid}')
-        p#type Song
-        .album-pic.photo(style='background-image:url(#{suggestion.photo})')
-        p.name #{suggestion.name}
-    - if(suggestion.musicType === 'artist')
-      #artist(data-id='#{suggestion.mbid}')
-        p#type Artist
-        .artist-pic.photo(style='background-image:url(#{suggestion.photo})')
-        p.name #{suggestion.name}
+    #suggestion(data-id='#{suggestion.mbid}' data-type='#{suggestion.musicType}')
+      - if(suggestion.musicType === 'song')
+        h2 Suggest Song to Friends
+        #song(data-id='#{suggestion.mbid}')
+          .album-pic.photo(style='background-image:url(#{suggestion.photo})')
+          p.name #{suggestion.name}
+      - if(suggestion.musicType === 'artist')
+        h2 Suggest Artist to Friends
+        #artist(data-id='#{suggestion.mbid}')
+          .artist-pic.photo(style='background-image:url(#{suggestion.photo})')
+          p.name #{suggestion.name}
 
-  .clear
-  p Select friends to suggest
-  #friends
-    label Select All
-    input#selectall(type='checkbox')
     .clear
-    each friend in friends
-      .friend
-        input.friend-check(type='checkbox', name='friend', value='#{friend._id}')
-        .friend-pic(style='background-image: url(#{friend.primaryPhoto})')
-        p= friend.appName
+    p.selectfriends Select friends to suggest
+    #friends
+      .selectall
+        label Select All
+        input#selectall(type='checkbox')
       .clear
+      each friend in friends
+        .friend
+          input.friend-check(type='checkbox', name='friend', value='#{friend._id}')
+          .friend-pic(style='background-image: url(#{friend.primaryPhoto})')
+          p.friend-name= friend.appName
+        .clear
 
-  .clear
-  button#send-suggestion(href='#') Send Suggestion
+    .clear
+    button#send-suggestion(href='#') Send Suggestion

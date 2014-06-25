@@ -1,14 +1,34 @@
 'use strict';
 
 var Cookies = require('cookies');
+var traceur = require('traceur');
+var User;
+var users = {};
 
 exports.connection = function(socket){
-  addUserToSocket(socket);
+  if(global.nss){
+    User = traceur.require(__dirname + '/../models/user.js');
+    addUserToSocket(socket);
+
+    socket.on('send-message', sendMessage);
+  }
 };
 
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
 /* -------------------------------------------------------------------------- */
+
+function sendMessage(data){
+
+  var socket = this;
+
+  console.log('************************');
+  console.log(this);
+
+  data.appName = socket.nss.user.appName;
+  socket.broadcast.emit('receive-message', data);
+  socket.emit('receive-message', data);
+}
 
 function addUserToSocket(socket){
   var cookies = new Cookies(socket.handshake, {}, ['SEC123', '321CES']);
@@ -19,21 +39,18 @@ function addUserToSocket(socket){
     decoded = decode(encoded);
   }
 
-  // 1. Find user in DB
-  // 2. Add user to socket
-  // 3. Inform the user they are online
+  User.findById(decoded.passport.user, (err, user)=>{
 
-  // EXAMPLE CODE
+    users[decoded.userId] = user;
+    socket.nss = {};
+    socket.nss.user = user;
+    socket.emit('online', users);
+    socket.broadcast.emit('online', users);
+  });
 
-  // User.findByUserId(obj.userId, user=>{
-  //   socket.set('user', user, ()=>{
-  //     socket.emit('online');
-  //   });
-  // });
-
-  console.log('COOKIE ==========================================');
+  console.log('COOKIE ===================================');
   console.log(decoded);
-  console.log('=================================================');
+  console.log('==========================================');
 }
 
 function decode(string) {

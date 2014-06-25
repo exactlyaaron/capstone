@@ -124,21 +124,21 @@ module.exports = function(passport) {
     function(req, email, password, done) {
       userCollection.findOne({ 'local.email' :  email }, function(err, user) {
 
-          user = _.create(User.prototype, user);
+        if (err){
+          return done(err);
+        }
 
-          if (err){
-            return done(err);
-          }
+        if (!user){
+          return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
+        }
 
-          if (!user){
-            return done(null, false, req.flash('loginMessage', 'No user found.')); // req.flash is the way to set flashdata using connect-flash
-          }
+        user = _.create(User.prototype, user);
 
-          if (!user.validPassword(password)){
-            return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
-          }
+        if (!user.validPassword(password)){
+          return done(null, false, req.flash('loginMessage', 'Oops! Wrong password.')); // create the loginMessage and save it to session as flashdata
+        }
 
-          return done(null, user);
+        return done(null, user);
       });
 
     }));

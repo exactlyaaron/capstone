@@ -6,7 +6,7 @@ var User = traceur.require(__dirname + '/../models/user.js');
 
 exports.show = (req, res)=>{
   var artistId = req.params.artistId;
-  res.render('artists/show', {artistId: artistId, title: 'Artist Detail'});
+  res.render('artists/show', {user:req.user, artistId: artistId, title: 'Artist Detail'});
 };
 
 exports.addArtist = (req, res)=>{
@@ -27,7 +27,7 @@ exports.removeArtist = (req, res)=>{
   var user = req.user;
   user.removeFavoriteArtist(req.params.artistId, ()=>{
     user.save(()=>{
-      res.render('users/favorite-artists-profile', {user:user});
+      res.render('users/favorite-artists-profile', {user:req.user});
     });
   });
 };

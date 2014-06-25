@@ -1,20 +1,60 @@
 extends ../shared/template
 
 block content
-  h1 USER PROFILE PAGE
   #other-user(data-id='#{otherUser._id}')
-    h2= otherUser.appName
     .other-profile-pic(style='background-image:url(#{otherUser.primaryPhoto})')
-    p= otherUser.bio
-    .clear
-    a#send-msg(href='/messages/new/#{otherUser._id}') Message
-    .clear
+    h2= otherUser.appName
+
+    if(otherUser.facebook.email)
+      p.other-user-email #{otherUser.facebook.email}
+    else
+      p.other-user-email #{otherUser.local.email}
 
     if(friend === true)
-      a(href='#')#remove-friend UNFRIEND
+      a.friend#remove-friend(href='#') UNFRIEND
     if(friend === false)
-      a(href='#')#add-friend ADD FRIEND
+      a.friend#add-friend(href='#') ADD FRIEND
+
+    a.friend#send-msg(href='/messages/new/#{otherUser._id}') Message
+
+    .clear
+    #tabs
+      a.info-tab.active-tab#show-posts(href='#') Posts
+      a.info-tab#show-about(href='#') About
+      a.info-tab#show-music(href='#') Favorite Music
+
+    #other-user-info
+
+      .clear
+      #about
+        p.other-user-bio= otherUser.bio
+      #posts
+        each post in posts
+          .post
+            p= post.body
+            each tag in post.tags
+              p.tag= tag
+
+      #favorite-music
+        #genres
+          p Favorite genres:
+          each genre in otherUser.favoriteGenres
+            p.genre= genre
+
+        #artists
+          p Favorite artists:
+          each artist in otherUser.favoriteArtists
+            .artist(data-id='#{artist.mbid}')
+              .artist-pic(style='background-image:url(#{artist.photo})')
+              p.artist-name= artist.name
+              a.add-favorite-artist(href='#') Add to favorites
+            .clear
+
+
+
 
 
 block scripts
   script(src='/js/es6/compiled/friends.js')
+  script(src='/js/es6/compiled/profile.js')
+  script(src='/js/es6/compiled/artist.js')

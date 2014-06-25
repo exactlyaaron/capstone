@@ -4,6 +4,6 @@ if(users)
       h2 USER INFO
       a(href='/users/profile/#{user._id}')
         h3= user.appName
-      .discover-profile-pic(style='background-image:url(#{user.primaryPhoto})')
+        .discover-profile-pic(style='background-image:url(#{user.primaryPhoto})')
 if(users.length < 1)
   p Sorry there are no results. Please try again.

@@ -51,8 +51,19 @@ class User {
 
   // checking if password is valid
   validPassword(password) {
-      return bcrypt.compareSync(password, this.local.password);
+    return bcrypt.compareSync(password, this.local.password);
   }
+
+  changePassword(obj, fn){
+    var isMatch = bcrypt.compareSync(obj.oldPassword, this.local.password);
+    if(isMatch){
+      this.local.password = this.generateHash(obj.newPassword);
+      fn(null);
+    }else{
+      fn('err');
+    }
+  }
+
 
   update(fields, files){
     if(fields && typeof(fields.appName) !== 'undefined') {
@@ -170,6 +181,8 @@ class User {
   }
 
   static findById(id, fn){
+    console.log('MADE IT TO THE USER FIND BY ID');
+    console.log(id);
     Base.findById(id, userCollection, User, fn);
   }
 
@@ -184,12 +197,9 @@ class User {
   }
 
   static searchUsers(query, fn){
-    console.log('METHOD QUERY------------');
-    console.log(query);
     userCollection.find({ $or: [ { appName: { $regex: query, $options: 'i' } },
                                  { 'favoriteArtists.name': { $regex: query, $options: 'i' }  },
                                  { favoriteGenres: { $in: [query] } } ] } ).toArray((err, users)=>{
-      console.log(users);
       fn(users);
     });
   }

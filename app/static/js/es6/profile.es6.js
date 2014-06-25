@@ -8,6 +8,36 @@
 
   function init(){
     $('body').on('click', '.remove-artist', removeFavoriteArtist);
+    $('#about, #favorite-music').hide();
+    $('#show-about').click(showAbout);
+    $('#show-posts').click(showPosts);
+    $('#show-music').click(showMusic);
+  }
+
+  function showAbout(){
+    $(this).addClass('active-tab');
+    $('#show-posts').removeClass('active-tab');
+    $('#show-music').removeClass('active-tab');
+
+    $('#posts, #favorite-music').hide();
+    $('#about').show();
+  }
+
+  function showPosts(){
+    $(this).addClass('active-tab');
+    $('#show-music').removeClass('active-tab');
+    $('#show-about').removeClass('active-tab');
+
+    $('#about, #favorite-music').hide();
+    $('#posts').show();
+  }
+
+  function showMusic(){
+    $(this).addClass('active-tab');
+    $('#show-posts, #show-about').removeClass('active-tab');
+
+    $('#posts, #about').hide();
+    $('#favorite-music').show();
   }
 
   function removeFavoriteArtist(){

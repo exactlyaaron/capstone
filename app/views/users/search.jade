@@ -1,24 +1,41 @@
 extends ../shared/template
 
 block content
-  h1 Search Page
 
-  p Search results for: '<span id='query'>#{query}</span>'
+  p Check out these awesome results for: <span class='querystring'>'<span id='query'>#{query}</span>'</span>
 
-  hr
   #results
-    h2 USERS:
-    #users
-      each user in users
-        .user-pic(style='background-image: url(#{user.primaryPhoto})')
-        p
-          a(href='/users/profile/#{user._id}') #{user.appName}
-    h2 ARTISTS:
-    #artists
+    #filter-container
+      a.filter.active#show-all(href='#') All results
+      .clear
+      a.filter#show-users(href='#') Users
+      .clear
+      a.filter#show-artists(href='#') Artists
+      .clear
+      a.filter#show-songs(href='#') Songs
 
-    h2 SONGS:
-    #songs
-      #player
+    #results-container
+      #user-results
+        h2.search-title USERS:
+        #users-wrapper
+          each u in users
+            a.user-link(href='/users/profile/#{u._id}')
+              .user-pic(style='background-image: url(#{u.primaryPhoto})')
+              p.user-name #{u.appName}
+              if(u.local.email)
+                p.user-email #{u.local.email}
+              else
+                p.user-email #{u.facebook.email}
+              .clear
+
+      #artist-results
+        h2.search-title ARTISTS:
+        #artists
+
+      #song-results
+        h2.search-title SONGS:
+        #songs
+          #player
 
 block scripts
   script(src='/js/es6/compiled/search.js')

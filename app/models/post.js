@@ -48,24 +48,21 @@ class Post {
 
       async.map(user.posts, buildPostArray, (err, resultsFirst)=>{
         console.log('FINISHED buildPostArray ASYNC MAP');
-        console.log('RESULTS FIRST**************');
 
         async.map(user.friends, buildFriendArray, (err, resultsSecond)=>{
           console.log('FINISHED buildFriendArray ASYNC MAP');
-          console.log('RESULTS SECOND**************');
 
           async.map(friendArray, buildFriendPostArray, (err, resultsThird)=>{
             console.log('FINISHED buildFriendPostArray ASYNC MAP');
-            console.log('RESULTS THIRD**************');
 
             var flatArr = [].concat.apply([],resultsThird);
-            console.log(flatArr);
 
             async.map(flatArr, finalizePostArray, (err, resultsFourth)=>{
               console.log('FINISHED finalizePostArray ASYNC MAP');
-              console.log('RESULTS FOURTH**************');
 
               console.log('ASYNC DONE==============================================');
+
+              _.uniq(postsToShow);
 
               postsToShow.sort(function(a,b){
                 // Turn your strings into dates, and then subtract them
@@ -82,6 +79,31 @@ class Post {
       });
     });
   }
+
+  static findPostsByUser(id, fn){
+    postsToShow = [];
+    id = Mongo.ObjectID(id);
+    User.findById(id, (err, user)=>{
+
+      async.map(user.posts, buildPostArray, (err, resultsFirst)=>{
+        console.log('FINISHED buildPostArray ASYNC MAP');
+
+          console.log('ASYNC DONE==============================================');
+
+          _.uniq(postsToShow);
+
+          postsToShow.sort(function(a,b){
+            // Turn your strings into dates, and then subtract them
+            // to get a value that is either negative, positive, or zero.
+            return new Date(b.date) - new Date(a.date);
+          });
+
+          fn(postsToShow);
+
+      });
+    });
+  }
+
 
 }
 

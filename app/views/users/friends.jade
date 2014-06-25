@@ -1,10 +1,24 @@
 extends ../shared/template
 
 block content
-  each friend in friends
-    .friend-pic(style='background-image: url(#{friend.primaryPhoto})')
-    h2
-      a(href='/users/profile/#{friend._id}') #{friend.appName}
+  #friends-page-list
+    if(friends)
+      each friend in friends
+        .friend
+          a(href='/users/profile/#{friend._id}')
+            .friend-pic(style='background-image: url(#{friend.primaryPhoto})')
+            if(friend.appName)
+              h2 #{friend.appName}
+            else
+              h2 Username not set
+            if(friend.facebook.email)
+              p.friend-email #{friend.facebook.email}
+            else
+              p.friend-email #{friend.local.email}
+          .clear
+    if(friends.length === 0)
+      h2 You currently have no friends. Why not?
+      a(href='/users/all') FIND FRIENDS!
 
 block scripts
   script(src='/js/es6/compiled/friends.js')

@@ -1,5 +1,5 @@
 /* jshint unused: false */
-/* global ajax, getSuggestionNumber */
+/* global ajax, getSuggestionNumber, getSong */
 
 (function(){
   'use strict';
@@ -14,6 +14,8 @@
     $('body').on('click', '#selectall', checkBoxes);
 
     $('#results').on('click', '.suggest-music', showSuggestion);
+
+    $('body').on('click', '.play-song', findSong);
   }
 
   function checkBoxes(){
@@ -36,7 +38,8 @@
     });
   }
 
-  function showSuggestion(){
+  function showSuggestion(e){
+    e.preventDefault();
     var userId = $('#user').attr('data-id');
 
     var suggestion = {};
@@ -49,7 +52,6 @@
     suggestion.photo = photo;
 
     ajax(`/users/${userId}/suggest`, 'post', {suggestion: suggestion}, html=>{
-      alert('got back');
       $('body').prepend(html);
     });
   }
@@ -81,13 +83,40 @@
     suggestion.photo = photo;
 
     ajax(`/users/${userId}/suggest/${suggestion.mbid}`, 'post', {suggestion: suggestion, friends: friendsToSuggest}, html=>{
-      $('#suggest-modal').empty().append(`<h2>SUGGESTION(S) SENT</h2>`);
+      $('#suggest-modal').empty().append(`<h2 class='sent'>SUGGESTION(S) SENT</h2>
+                                          <button class='boxclose' id='close-modal'></button>`);
       console.log(html);
     });
   }
 
   function closeModal(){
     $('#overlay, #suggest-modal').remove();
+  }
+
+  function findSong(e){
+    e.preventDefault();
+    var id = $(this).attr('data-id');
+    $(this).siblings('.photo').hide();
+
+    var url = 'http://ws.audioscrobbler.com/2.0/?method=track.getInfo&api_key=fe3c0d18e6dec590f61bf2a0f3615f2c&mbid='+id+'&format=json';
+
+    $.getJSON(url, data=>{
+      console.log(data);
+      var song = data.track.name;
+      var artist = data.track.artist.name;
+
+      renderSong(song, artist, 175);
+    });
+
+  }
+
+  function renderSong(song, artist, size){
+    
+    // var song = $(this).parent().attr('data-song');
+    // var artist = 'artistName';
+    //alert(artist);
+
+    getSong(song, artist, size);
   }
 
 })();

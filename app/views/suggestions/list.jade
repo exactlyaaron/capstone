@@ -1,14 +1,28 @@
-each suggestion in suggestions
-  .suggestion-single(data-id='#{suggestion._id}')
-    .suggestion-pic(style='background-image:url(#{suggestion.photo})')
-    - if(suggestion.musicType === 'song')
-        h3 #{suggestion.name}
-    - if(suggestion.musicType === 'artist')
-        a(href='/artists/#{suggestion.mbid}')
-          h3 #{suggestion.name}
+if(suggestions)
+  each suggestion in suggestions
+    .suggestion-single(data-id='#{suggestion._id}')
+      .suggestion-pic.photo(style='background-image:url(#{suggestion.photo})')
+      div(data-song='#{suggestion.name}')
+      - if(suggestion.musicType === 'song')
+          p.type SONG
+          h3.name #{suggestion.name}
+          a.play-song(href='#' data-id='#{suggestion.mbid}')
+            i.fa.fa-play-circle Play
+      - if(suggestion.musicType === 'artist')
+          a(href='/artists/#{suggestion.mbid}')
+            p.type ARTIST
+            h3.name #{suggestion.name}
 
-    p From:
-      a(href='/users/profile/#{suggestion.fromId}') #{suggestion.fromUserName}
 
-    .clear
-    a#delete-suggestion(href'#') Delete Suggestion
+
+      .suggestedby
+        .right
+          .suggester-pic(style='background-image: url(#{suggestion.fromUserPhoto})')
+        .right
+          p Suggested by:
+          a.suggester-name(href='/users/profile/#{suggestion.fromId}') #{suggestion.fromUserName}
+
+      .clear
+      a.boxclose#delete-suggestion(href'#')
+if(suggestions.length === 0)
+  h1 You currently have no music suggestions.

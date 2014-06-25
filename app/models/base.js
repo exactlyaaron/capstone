@@ -3,6 +3,7 @@ var _ = require('lodash');
 
 class Base {
   static findById(id, collection, model, fn){
+
     if(typeof id === 'string'){
       if(id.length !== 24){fn(null); return;}
       id = Mongo.ObjectID(id);
@@ -11,6 +12,7 @@ class Base {
     if(!(id instanceof Mongo.ObjectID)){fn(null); return;}
 
     collection.findOne({_id:id}, (e,obj)=>{
+
       if(obj){
         obj = _.create(model.prototype, obj);
         fn(null, obj);
