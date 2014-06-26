@@ -10,13 +10,13 @@ module.exports = {
 	'facebookAuth' : {
 		'clientID' 	   	: fbKey, // your App ID
 		'clientSecret' 	: fbSecret, // your App Secret
-		'callbackURL' 	: 'http://localhost:3000/auth/facebook/callback'
+		'callbackURL' 	: 'http://fusion.aaronjohnsondesign.com/auth/facebook/callback'
 	},
 
 	'twitterAuth' : {
 		'consumerKey' 		: twitterKey,
 		'consumerSecret' 	: twitterSecret,
-		'callbackURL' 		: 'http://localhost:3000/auth/twitter/callback'
+		'callbackURL' 		: 'http://fusion.aaronjohnsondesign.com/auth/twitter/callback'
 	}
 
 };
