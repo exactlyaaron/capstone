@@ -16,7 +16,8 @@
     var postId = $(this).closest('.post-wrapper').attr('data-id');
 
     ajax(`/posts/${postId}/share`, 'post', null, html=>{
-      $(this).text('You shared that bitch');
+      $(this).text('SHARED');
+      $(this).css('background-color', '#4B98C6');
     });
   }
 
