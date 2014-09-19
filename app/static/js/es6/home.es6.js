@@ -1,4 +1,5 @@
 /* jshint unused: false */
+/* jshint quotmark: false */
 // global functions
 /* global ajax, getSuggestionNumber */
 

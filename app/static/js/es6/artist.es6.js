@@ -1,5 +1,6 @@
 /* global ajax, getSong */
 /* jshint unused:false */
+/* jshint quotmark:false */
 
 (function(){
   'use strict';
