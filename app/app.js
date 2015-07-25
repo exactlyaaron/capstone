@@ -28,10 +28,11 @@ app.set('view engine', 'jade');
 /* --- pipeline         */
 app.use(initMongo);
 app.use(initRoutes);
-app.use(morgan({format: 'dev'}));
+app.use(morgan('dev', {format: 'dev'}));
 app.use(express.static(__dirname + '/static'));
 app.use('/less', less(__dirname + '/less'));
-app.use(bodyParser());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.json());
 app.use(methodOverride());
 app.use(cookieSession({keys:['SEC123', '321CES']}));
 
@@ -41,7 +42,9 @@ app.use(cookieSession({keys:['SEC123', '321CES']}));
 /********* PASSPORT CONFIGURATION STUFF **********/
 
 app.use(cookieParser('optional secret string'));
-app.use(session({secret: 'ilovescotchscotchyscotchscotch'}));
+app.use(session({ secret: 'ilovescotchscotchyscotchscotch',
+                  saveUninitialized: true,
+                  resave: true}));
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
